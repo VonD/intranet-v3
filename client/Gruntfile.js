@@ -33,11 +33,20 @@ module.exports = function(grunt) {
 			}
 		},
 		connect: {
-			server: {
+			assetsServer: {
 				options: {
 					port: 2000,
 					hostname: '*',
 					base: 'dist',
+					keepalive: true,
+					debug: true
+				}
+			},
+			htmlServer: {
+				options: {
+					port: 3000,
+					hostname: '*',
+					base: 'html',
 					keepalive: true,
 					debug: true
 				}
