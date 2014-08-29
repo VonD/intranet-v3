@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount_cents: 1000 
+  date: 2014-08-29
+  reference: MyString
+
+two:
+  amount_cents: 8035 
+  date: 2014-08-29
+  reference: MyString
