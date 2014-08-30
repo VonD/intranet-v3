@@ -32,9 +32,12 @@ private
 	end
 
 	def validate
-		bank_entry.valid?
-		accounting_entries.each(&:valid?)
-		has_at_least_one_accounting_entry?
+		[
+			bank_entry.valid?,
+			accounting_entries.map(&:valid?).all?,
+			has_at_least_one_accounting_entry?,
+			amounts_match?
+		].all?
 	end
 
 	def persist
@@ -45,6 +48,18 @@ private
 		return true if accounting_entries.length > 0
 		bank_entry.errors.add :accounting_entries, greater_than: 0
 		false
+	end
+
+	def amounts_match?
+		sum = accounting_entries.map(&:amount).inject(:+)
+		unless bank_entry.amount
+			bank_entry.amount = sum
+			true
+		else
+			return true if bank_entry.amount == sum
+			bank_entry.errors.add :amount, must_equal: sum
+			false
+		end
 	end
 
 end

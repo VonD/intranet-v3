@@ -49,4 +49,14 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		assert creator.bank_entry.errors.include? :accounting_entries
 	end
 
+	test "it requires amounts to match" do
+		creator = BankEntryCreator.new(amount: 140, accounting_entries: [
+			{amount: 50, date: Date.today},
+			{amount: 70, date: Date.today - 1.month}
+		])
+		refute creator.save
+		refute creator.accounting_entries.map(&:persisted?).any?
+		assert creator.bank_entry.errors.include? :amount
+	end
+
 end
