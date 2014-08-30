@@ -49,7 +49,7 @@ class AccountingEntryTest < ActiveSupport::TestCase
 	test "it requires a bank_entry_id" do
 		accounting_entry = AccountingEntry.new
 		accounting_entry.valid?
-		assert accounting_entry.errors.include? :bank_entry_id
+		assert accounting_entry.errors.include? :bank_entry
 	end
 
 end

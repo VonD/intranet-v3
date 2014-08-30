@@ -8,7 +8,7 @@ class AccountingEntry < ActiveRecord::Base
 
 	validate :amount_is_not_null
 	validates_presence_of :date
-	validates_presence_of :bank_entry_id
+	validates_presence_of :bank_entry
 
 private
 
