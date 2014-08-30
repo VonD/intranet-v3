@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140829170931) do
+ActiveRecord::Schema.define(version: 20140830130932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounting_entries", force: true do |t|
+    t.integer  "bank_entry_id"
+    t.date     "date"
+    t.integer  "amount_cents",  default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "bank_entries", force: true do |t|
     t.integer  "amount_cents"

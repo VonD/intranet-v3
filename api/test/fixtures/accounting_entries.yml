@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bank_entry_id: 1
+  date: 2014-08-30
+  amount_cents: 5000
+
+two:
+  bank_entry_id: 1
+  date: 2014-08-30
+  amount_cents: 3500 

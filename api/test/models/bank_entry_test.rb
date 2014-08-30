@@ -23,7 +23,7 @@ class BankEntryTest < ActiveSupport::TestCase
 
 	test "it adds error on unparsable money" do
 		bank_entry = BankEntry.new(amount: "junk")
-		refute bank_entry.valid?
+		bank_entry.valid?
 		assert bank_entry.errors.include? :amount
 	end
 
@@ -38,7 +38,7 @@ class BankEntryTest < ActiveSupport::TestCase
 
 	test "it adds error on unparsable date" do
 		bank_entry = BankEntry.new(date: "2014-02-31")
-		refute bank_entry.valid?
+		bank_entry.valid?
 		assert bank_entry.errors.include? :date
 	end
 
