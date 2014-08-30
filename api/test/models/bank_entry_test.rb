@@ -27,4 +27,16 @@ class BankEntryTest < ActiveSupport::TestCase
 		assert bank_entry.errors.include? :amount
 	end
 
+	test "it allows empty date on create" do
+		bank_entry = BankEntry.new
+		bank_entry.valid?
+		refute bank_entry.errors.include? :date
+	end
+
+	#test "it adds error on unparsable date" do
+	#	bank_entry = BankEntry.new(date: "2014-02-31")
+	#	refute bank_entry.valid?
+	#	assert bank_entry.errors.include? :date
+	#end
+
 end
