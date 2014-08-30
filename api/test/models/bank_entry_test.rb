@@ -31,12 +31,27 @@ class BankEntryTest < ActiveSupport::TestCase
 		bank_entry = BankEntry.new
 		bank_entry.valid?
 		refute bank_entry.errors.include? :date
+		bank_entry.date = Date.today
+		bank_entry.date = nil
+		assert_nil bank_entry.date
 	end
 
-	#test "it adds error on unparsable date" do
-	#	bank_entry = BankEntry.new(date: "2014-02-31")
-	#	refute bank_entry.valid?
-	#	assert bank_entry.errors.include? :date
-	#end
+	test "it adds error on unparsable date" do
+		bank_entry = BankEntry.new(date: "2014-02-31")
+		refute bank_entry.valid?
+		assert bank_entry.errors.include? :date
+	end
+
+	test "it correcly cleans/adds date errors" do
+		bank_entry = BankEntry.new
+		bank_entry.valid?
+		refute bank_entry.errors.include? :date
+		bank_entry.date = "2014-02-31"
+		bank_entry.valid?
+		assert bank_entry.errors.include? :date
+		bank_entry.date = "2014-02-02"
+		bank_entry.valid?
+		refute bank_entry.errors.include? :date
+	end
 
 end
