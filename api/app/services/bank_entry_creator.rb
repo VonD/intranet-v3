@@ -14,10 +14,10 @@ class BankEntryCreator
 private
 
 	def validate
-		bank_entry.amount = attributes[:amount].to_money if attributes[:amount]
+		bank_entry.amount = attributes[:amount] if attributes[:amount]
 		bank_entry.date = attributes[:date] if attributes[:date]
 		bank_entry.reference = attributes[:reference] if attributes[:reference]
-		true
+		bank_entry.valid?
 	end
 
 	def persist

@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20140829170931) do
   enable_extension "plpgsql"
 
   create_table "bank_entries", force: true do |t|
-    t.integer  "amount_cents", default: 0, null: false
+    t.integer  "amount_cents"
     t.date     "date"
     t.string   "reference"
     t.datetime "created_at"

@@ -8,4 +8,11 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		assert creator.bank_entry.persisted?
 	end
 
+	test "it calls model validations" do
+		creator = BankEntryCreator.new(amount: "junk", date: Date.today, reference: "VIR 237")
+		refute creator.save
+		assert creator.bank_entry.new_record?
+		assert creator.bank_entry.errors.include? :amount
+	end
+
 end
