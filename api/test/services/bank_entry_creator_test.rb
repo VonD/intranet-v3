@@ -46,6 +46,7 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 	test "it requires at least one accounting_entry to be present" do
 		creator = BankEntryCreator.new
 		refute creator.save
+		refute creator.bank_entry.persisted?
 		assert creator.bank_entry.errors.include? :accounting_entries
 	end
 
@@ -55,8 +56,20 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 			{amount: 70, date: Date.today - 1.month}
 		])
 		refute creator.save
+		refute creator.bank_entry.persisted?
 		refute creator.accounting_entries.map(&:persisted?).any?
 		assert creator.bank_entry.errors.include? :amount
+	end
+
+	test "it requires dates sequence to be respected" do
+		creator = BankEntryCreator.new(amount: 140, date: Date.today - 3.months, accounting_entries: [
+			{amount: 50, date: Date.today},
+			{amount: 70, date: Date.today - 1.month}
+		])
+		refute creator.save
+		refute creator.bank_entry.persisted?
+		refute creator.accounting_entries.map(&:persisted?).any?
+		assert creator.bank_entry.errors.include? :date
 	end
 
 end

@@ -36,7 +36,8 @@ private
 			bank_entry.valid?,
 			accounting_entries.map(&:valid?).all?,
 			has_at_least_one_accounting_entry?,
-			amounts_match?
+			amounts_match?,
+			respects_date_sequence?
 		].all?
 	end
 
@@ -57,9 +58,17 @@ private
 			true
 		else
 			return true if bank_entry.amount == sum
-			bank_entry.errors.add :amount, must_equal: sum
+			bank_entry.errors.add :amount, equal_to: sum
 			false
 		end
+	end
+
+	def respects_date_sequence?
+		return true if bank_entry.date.blank?
+		accounting_dates = accounting_entries.map(&:date).reject(&:blank?)
+		return true if accounting_dates.map{ |d| d <= bank_entry.date }.all?
+		bank_entry.errors.add :date, greater_than_or_equal_to: accounting_dates.sort.last
+		false
 	end
 
 end
