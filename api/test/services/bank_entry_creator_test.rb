@@ -42,6 +42,7 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		ids = creator.accounting_entries.map(&:bank_entry_id).uniq
 		assert_equal 1, ids.length
 		assert_equal creator.bank_entry.id, ids.first
+		assert_equal group.id, creator.accounting_entries.first.group_id
 	end
 
 	test "it requires at least one accounting_entry to be present" do
@@ -72,5 +73,4 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		refute creator.accounting_entries.map(&:persisted?).any?
 		assert creator.bank_entry.errors.include? :date
 	end
-
 end

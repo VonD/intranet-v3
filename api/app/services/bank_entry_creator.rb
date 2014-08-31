@@ -26,6 +26,7 @@ private
 	def transfer_accounting_entries_params
 		(@params[:accounting_entries] || []).each do |entry_params|
 			entry = @bank_entry.accounting_entries.build
+			entry.group_id = @bank_entry.group_id
 			entry.amount = entry_params[:amount] if entry_params[:amount].present?
 			entry.date = entry_params[:date] if entry_params[:date].present?
 			@accounting_entries.push entry

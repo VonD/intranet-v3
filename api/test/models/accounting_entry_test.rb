@@ -52,4 +52,10 @@ class AccountingEntryTest < ActiveSupport::TestCase
 		assert accounting_entry.errors.include? :bank_entry
 	end
 
+	test "it requires a group" do
+		accounting_entry = AccountingEntry.new
+		accounting_entry.valid?
+		assert accounting_entry.errors.include? :group
+	end
+
 end
