@@ -52,4 +52,28 @@ class GroupTest < ActiveSupport::TestCase
 		refute group.errors.include? :is_active_from
 	end
 
+	test "it allows is_active_to to be null" do
+		group = Group.new(is_active_from: Date.today)
+		group.valid?
+		refute group.errors.include? :is_active_to
+	end
+
+	test "it allows is_active_to to be posterior to is_active_from" do
+		group = Group.new(is_active_from: Date.today, is_active_to: Date.today + 1.day)
+		group.valid?
+		refute group.errors.include? :is_active_to
+	end
+
+	test "it forbids is_active_to to be anterior to is_active_from" do
+		group = Group.new(is_active_from: Date.today, is_active_to: Date.today - 1.day)
+		group.valid?
+		assert group.errors.include? :is_active_to
+	end
+
+	test "it allows is_active_to to be present only if is_active_from is" do
+		group = Group.new(is_active_to: Date.today)
+		group.valid?
+		assert group.errors.include? :is_active_from
+	end
+
 end
