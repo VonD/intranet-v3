@@ -65,6 +65,19 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		assert creator.bank_entry.errors.include? :amount
 	end
 
+	test "it transfers amount if none is given" do
+		group = groups(:one)
+		group.is_active_from = Date.today - 2.months
+		group.save!
+		creator = BankEntryCreator.new(group_id: group.id, accounting_entries: [
+			{amount: 50, date: Date.today},
+			{amount: 70, date: Date.today - 1.month}
+		])
+		assert creator.save
+		assert creator.bank_entry.persisted?
+		assert_equal 120, creator.bank_entry.amount
+	end
+
 	test "it requires dates sequence to be respected" do
 		creator = BankEntryCreator.new(amount: 140, date: Date.today - 3.months, accounting_entries: [
 			{amount: 50, date: Date.today},
