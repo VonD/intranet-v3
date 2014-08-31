@@ -3,6 +3,8 @@ client/node_modules
 client/bower_components
 client/dist
 
+api/coverage
+
 /**/*.log
 
 *.pid
