@@ -17,7 +17,10 @@ class BankEntryCreator
 private
 
 	def transfer_bank_entry_params
-		bank_entry.group_id = @params[:group_id] if @params[:group_id].present?
+		if @params[:group_id].present?
+			bank_entry.group_id = @params[:group_id]
+			@group = bank_entry.group
+		end
 		bank_entry.amount = @params[:amount] if @params[:amount].present?
 		bank_entry.date = @params[:date] if @params[:date].present?
 		bank_entry.reference = @params[:reference] if @params[:reference].present?
@@ -26,7 +29,7 @@ private
 	def transfer_accounting_entries_params
 		(@params[:accounting_entries] || []).each do |entry_params|
 			entry = bank_entry.accounting_entries.build
-			entry.group_id = bank_entry.group_id
+			entry.group_id = @group.id if @group.present?
 			entry.amount = entry_params[:amount] if entry_params[:amount].present?
 			entry.date = entry_params[:date] if entry_params[:date].present?
 			@accounting_entries.push entry
@@ -49,11 +52,13 @@ private
 	end
 
 	def group_is_active?
-		return false if bank_entry.group.nil?
-		return true if bank_entry.date.nil?
-		return true if bank_entry.group.is_active_on?(bank_entry.date)
-		bank_entry.errors.add :date, :group_must_be_active_at_this_date
-		false
+		return true if @group.nil?
+		valid = ([bank_entry] + accounting_entries).map do |entry|
+			invalid = entry.date.present? && @group.is_inactive_on?(entry.date)
+			entry.errors.add(:date, :group_is_inactive_on_this_date) if invalid
+			!invalid
+		end
+		valid.all?
 	end
 
 	def has_at_least_one_accounting_entry?

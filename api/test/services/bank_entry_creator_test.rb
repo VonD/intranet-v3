@@ -31,6 +31,8 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 
 	test "it persists a bank entry with accounting entries" do
 		group = groups(:one)
+		group.is_active_from = Date.today - 2.months
+		group.save!
 		creator = BankEntryCreator.new(amount: 120, group_id: group.id, accounting_entries: [
 			{amount: 50, date: Date.today},
 			{amount: 70, date: Date.today - 1.month}
@@ -86,6 +88,20 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		refute creator.bank_entry.persisted?
 		refute creator.accounting_entries.map(&:persisted?).any?
 		assert creator.bank_entry.errors.include? :date
+	end
+
+	test "it forbids creation of accounting_entries within group inactive period" do
+		group = groups(:two)
+		group.is_active_from = Date.today + 1.day
+		group.save!
+		creator = BankEntryCreator.new(amount: 120, group_id: group.id, accounting_entries: [
+			{amount: 50, date: Date.today},
+			{amount: 70, date: Date.today + 1.month}
+		])
+		refute creator.save
+		refute creator.bank_entry.persisted?
+		refute creator.accounting_entries.map(&:persisted?).any?
+		assert creator.accounting_entries.first.errors.include? :date
 	end
 
 end

@@ -5,7 +5,7 @@ one:
   location: MyString
   is_test: false
   is_active_from: 2014-08-31
-  is_active_to: 2014-08-31
+  is_active_to: 2020-08-31
 
 two:
   name: MyString

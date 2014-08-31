@@ -14,6 +14,10 @@ class Group < ActiveRecord::Base
 		return is_active_from.present? && is_active_from <= date && (is_active_to.nil? || is_active_to >= date)
 	end
 
+	def is_inactive_on? date
+		! is_active_on?(date)
+	end
+
 private
 
 	def activity_date_sequence
