@@ -30,7 +30,8 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 	end
 
 	test "it persists a bank entry with accounting entries" do
-		creator = BankEntryCreator.new(amount: 120, accounting_entries: [
+		group = groups(:one)
+		creator = BankEntryCreator.new(amount: 120, group_id: group.id, accounting_entries: [
 			{amount: 50, date: Date.today},
 			{amount: 70, date: Date.today - 1.month}
 		])

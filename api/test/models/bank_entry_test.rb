@@ -10,7 +10,8 @@ class BankEntryTest < ActiveSupport::TestCase
 	test "it allows nil amount" do
 		bank_entry = BankEntry.new
 		assert_nil bank_entry.amount
-		assert bank_entry.valid?
+		bank_entry.valid?
+		refute bank_entry.errors.include? :amount
 	end
 
 	test "it monetizes amount with a string" do
@@ -52,6 +53,12 @@ class BankEntryTest < ActiveSupport::TestCase
 		bank_entry.date = "2014-02-02"
 		bank_entry.valid?
 		refute bank_entry.errors.include? :date
+	end
+
+	test "it requires a group" do
+		bank_entry = BankEntry.new
+		bank_entry.valid?
+		assert bank_entry.errors.include? :group
 	end
 
 end

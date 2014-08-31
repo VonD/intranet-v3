@@ -17,6 +17,7 @@ class BankEntryCreator
 private
 
 	def transfer_bank_entry_params
+		bank_entry.group_id = @params[:group_id] if @params[:group_id].present?
 		bank_entry.amount = @params[:amount] if @params[:amount].present?
 		bank_entry.date = @params[:date] if @params[:date].present?
 		bank_entry.reference = @params[:reference] if @params[:reference].present?
