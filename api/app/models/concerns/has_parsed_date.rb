@@ -1,23 +1,28 @@
 module HasParsedDate
 	extend ActiveSupport::Concern
 
-	def date= expression
-		begin
-			return write_attribute(:date, nil) if expression.blank?
-			parsed_date = DateParser.parse(expression)
-			@had_error_on_parsed_date = false
-			write_attribute :date, parsed_date
-		rescue ArgumentError
-			@had_error_on_parsed_date = true
-		end
-	end
-
 	included do
-		validate do
-			if @had_error_on_parsed_date
-				errors.add :date, :invalid
+
+		columns.select do |column|
+			column.type == :date && column.name != 'created_at' && column.name != 'updated_at'
+		end.map(&:name).each do |attr|
+			define_method "#{attr}=" do |expression|
+				begin
+					return write_attribute(attr, nil) if expression.blank?
+					parsed_date = DateParser.parse(expression)
+					instance_variable_set "@had_error_on_parsed_#{attr}", false
+					write_attribute attr, parsed_date
+				rescue ArgumentError
+					instance_variable_set "@had_error_on_parsed_#{attr}", true
+				end
+			end
+			validate do
+				if instance_variable_get "@had_error_on_parsed_#{attr}"
+					errors.add attr, :invalid
+				end
 			end
 		end
+
 	end
 
 end
