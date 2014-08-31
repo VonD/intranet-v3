@@ -10,6 +10,10 @@ class Group < ActiveRecord::Base
 
 	has_many :bank_entries
 
+	def is_active_on? date
+		return is_active_from.present? && is_active_from <= date && (is_active_to.nil? || is_active_to >= date)
+	end
+
 private
 
 	def activity_date_sequence

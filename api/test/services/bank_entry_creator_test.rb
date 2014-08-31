@@ -73,4 +73,19 @@ class BankEntryCreatorTest < ActiveSupport::TestCase
 		refute creator.accounting_entries.map(&:persisted?).any?
 		assert creator.bank_entry.errors.include? :date
 	end
+
+	test "it forbids creation of bank_entry with date within group inactive period" do
+		group = groups(:two)
+		group.is_active_from = Date.today + 1.day
+		group.save!
+		creator = BankEntryCreator.new(amount: 120, group_id: group.id, date: Date.today, accounting_entries: [
+			{amount: 50, date: Date.today},
+			{amount: 70, date: Date.today - 1.month}
+		])
+		refute creator.save
+		refute creator.bank_entry.persisted?
+		refute creator.accounting_entries.map(&:persisted?).any?
+		assert creator.bank_entry.errors.include? :date
+	end
+
 end

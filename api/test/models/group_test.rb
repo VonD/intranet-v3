@@ -76,4 +76,19 @@ class GroupTest < ActiveSupport::TestCase
 		assert group.errors.include? :is_active_from
 	end
 
+	test "it tells if it is active at a given date" do
+		group = Group.new
+		refute group.is_active_on? Date.today
+		group.is_active_from = Date.today
+		refute group.is_active_on? Date.today - 1.day
+		assert group.is_active_on? Date.today
+		assert group.is_active_on? Date.today + 1.day
+		group.is_active_to = Date.today + 1.month
+		assert group.is_active_on? Date.today
+		assert group.is_active_on? Date.today + 1.day
+		assert group.is_active_on? Date.today
+		assert group.is_active_on? Date.today + 1.month
+		refute group.is_active_on? Date.today + 1.month + 1.day
+	end
+
 end

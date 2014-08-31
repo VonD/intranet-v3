@@ -25,8 +25,8 @@ private
 
 	def transfer_accounting_entries_params
 		(@params[:accounting_entries] || []).each do |entry_params|
-			entry = @bank_entry.accounting_entries.build
-			entry.group_id = @bank_entry.group_id
+			entry = bank_entry.accounting_entries.build
+			entry.group_id = bank_entry.group_id
 			entry.amount = entry_params[:amount] if entry_params[:amount].present?
 			entry.date = entry_params[:date] if entry_params[:date].present?
 			@accounting_entries.push entry
@@ -37,6 +37,7 @@ private
 		[
 			bank_entry.valid?,
 			accounting_entries.map(&:valid?).all?,
+			group_is_active?,
 			has_at_least_one_accounting_entry?,
 			amounts_match?,
 			respects_date_sequence?
@@ -45,6 +46,14 @@ private
 
 	def persist
 		bank_entry.save
+	end
+
+	def group_is_active?
+		return false if bank_entry.group.nil?
+		return true if bank_entry.date.nil?
+		return true if bank_entry.group.is_active_on?(bank_entry.date)
+		bank_entry.errors.add :date, :group_must_be_active_at_this_date
+		false
 	end
 
 	def has_at_least_one_accounting_entry?
