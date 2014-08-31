@@ -1,5 +1,7 @@
 class Group < ActiveRecord::Base
 
+	include HasParsedDates
+
 	validates_presence_of :name
 
 	scope :real, -> { where(is_test: true) }
