@@ -1,6 +1,6 @@
 class BankEntry < ActiveRecord::Base
 
-	include HasParsedDate
+	include HasParsedDates
 
 	monetize :amount_cents, allow_nil: true
 

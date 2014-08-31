@@ -1,6 +1,6 @@
 class AccountingEntry < ActiveRecord::Base
 
-	include HasParsedDate
+	include HasParsedDates
 
 	monetize :amount_cents
 

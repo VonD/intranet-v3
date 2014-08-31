@@ -1,4 +1,4 @@
-module HasParsedDate
+module HasParsedDates
 	extend ActiveSupport::Concern
 
 	included do
