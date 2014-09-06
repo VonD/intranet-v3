@@ -1,5 +1,7 @@
 class BankEntryService
 
+	include EntryService
+
 	attr_accessor :bank_entry, :accounting_entries
 
 	def initialize params={}
@@ -14,18 +16,12 @@ class BankEntryService
 
 private
 
+	def entries
+		[bank_entry] + accounting_entries
+	end 
+
 	def persist
 		bank_entry.save
-	end
-
-	def group_is_active?
-		return true if @group.nil?
-		valid = ([bank_entry] + accounting_entries).map do |entry|
-			invalid = entry.date.present? && @group.is_inactive_on?(entry.date)
-			entry.errors.add(:date, :group_is_inactive_on_this_date) if invalid
-			!invalid
-		end
-		valid.all?
 	end
 
 	def has_at_least_one_accounting_entry?
