@@ -5,6 +5,6 @@ client/dist
 
 api/coverage
 
-/**/*.log
+*.log
 
 *.pid
