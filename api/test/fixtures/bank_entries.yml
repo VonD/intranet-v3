@@ -4,8 +4,10 @@ one:
   amount_cents: 1000 
   date: 2014-08-29
   reference: MyString
+  group: one
 
 two:
   amount_cents: 8035 
   date: 2014-08-29
   reference: MyString
+  group: two
