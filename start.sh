@@ -7,11 +7,15 @@ grunt &
 echo $! > ../grunt.pid
 
 cd dist
-python -m SimpleHTTPServer 2000 &
+http-server -p 2000 --cors &
 echo $! > ../../assets-server.pid
 
+cd ../bower_components
+http-server -p 2001 --cors &
+echo $! > ../../components-server.pid
+
 cd ../html
-python -m SimpleHTTPServer 3000 &
+http-server -p 3000 --cors &
 echo $! > ../../html-server.pid
 
 cd ../../api

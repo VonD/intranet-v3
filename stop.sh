@@ -9,5 +9,8 @@
 [ -e assets-server.pid ] && cat assets-server.pid | xargs kill
 [ -e assets-server.pid ] && rm assets-server.pid
 
+[ -e components-server.pid ] && cat components-server.pid | xargs kill
+[ -e components-server.pid ] && rm components-server.pid
+
 [ -e api.pid ] && cat api.pid | xargs kill
 [ -e api.pid ] && rm api.pid
