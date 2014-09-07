@@ -1,5 +1,11 @@
 module EntryService
 
+	def save
+		validate && process && persist
+	end
+
+private
+
 	def group_is_active?
 		return true if @group.nil?
 		valid = entries.map do |entry|
@@ -8,6 +14,10 @@ module EntryService
 			!invalid
 		end
 		valid.all?
+	end
+
+	def process
+		true
 	end
 
 end

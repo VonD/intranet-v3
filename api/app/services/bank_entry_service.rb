@@ -10,10 +10,6 @@ class BankEntryService
 		transfer_accounting_entries_params
 	end
 
-	def save
-		validate && persist
-	end
-
 private
 
 	def entries

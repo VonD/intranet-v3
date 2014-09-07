@@ -12,10 +12,6 @@ class AccountingEntryCreator
 		transfer_accounting_entries_params
 	end
 
-	def save
-		validate && process && persist
-	end
-
 private
 
 	def entries
