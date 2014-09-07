@@ -44,4 +44,26 @@ class AccountingEntryCreatorTest < ActiveSupport::TestCase
 		assert creator.accounting_entry.errors.include?(:date)
 	end
 
+	test "it updates bank_entry amount" do
+		bank_entry = bank_entries(:one)
+		amount = bank_entry.amount
+		group = bank_entry.group
+		group.is_active_from = bank_entry.date
+		group.save!
+		creator = AccountingEntryCreator.new(bank_entry, {date: bank_entry.date, amount: 50})
+		creator.save
+		assert_equal amount + 50.to_money, creator.bank_entry.amount
+	end
+
+	test "it ensures dates sequence if bank_entry has a date" do
+		bank_entry = bank_entries(:one)
+		amount = bank_entry.amount
+		group = bank_entry.group
+		group.is_active_from = bank_entry.date
+		group.save!
+		creator = AccountingEntryCreator.new(bank_entry, {date: bank_entry.date + 1.day, amount: 50})
+		creator.save
+		assert creator.accounting_entry.errors.include? :date
+	end
+
 end
