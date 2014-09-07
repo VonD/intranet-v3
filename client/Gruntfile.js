@@ -9,14 +9,14 @@ module.exports = function(grunt) {
 					ieCompat: true
 				},
 				files: {
-					"dist/assets/app.css": "src/css/app.less"
+					"dist/app.css": "src/css/app.less"
 				} 
 			}
 		},
 		uglify: {
 			dist: {
 				files: {
-					'dist/assets/app.js': [
+					'dist/app.js': [
 						'src/js/app.js'
 					]
 				}
@@ -31,26 +31,6 @@ module.exports = function(grunt) {
 				files: "src/js/**/*.js",
 				tasks: ['uglify'] 
 			}
-		},
-		connect: {
-			assetsServer: {
-				options: {
-					port: 2000,
-					hostname: '*',
-					base: 'dist',
-					keepalive: true,
-					debug: true
-				}
-			},
-			htmlServer: {
-				options: {
-					port: 3000,
-					hostname: '*',
-					base: 'html',
-					keepalive: true,
-					debug: true
-				}
-			}
 		}
 	});
 
@@ -60,8 +40,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 
 	grunt.registerTask('compile', ['less', 'uglify']);
-	grunt.registerTask('dev', ['compile', 'watch']);
-	grunt.registerTask('serve', ['connect']);
-	grunt.registerTask('default', ['dev']);
-
+	grunt.registerTask('default', ['compile', 'watch']);
 };
